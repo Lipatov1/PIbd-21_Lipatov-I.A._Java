@@ -6,7 +6,7 @@ public class PanelSelfPropArtilleryInstal extends JPanel {
 
     public void paintComponent(Graphics g) {
         if (selfPropArtilleryInstal != null) {
-            selfPropArtilleryInstal.DrawTransport(g);
+            selfPropArtilleryInstal.drawTransport(g);
         }
     }
 

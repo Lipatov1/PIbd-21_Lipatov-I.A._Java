@@ -9,7 +9,7 @@ public class Guns {
         numberGuns = NumberGuns.getNumber(quantity);
     }
 
-    public void DrawGuns(Graphics g, Color color, int startPosX, int startPosY) {
+    public void drawGuns(Graphics g, Color color, int startPosX, int startPosY) {
         g.setColor(color);
         if (numberGuns != null) {
             g.fillRoundRect(startPosX + 145, startPosY + 5, 50, 7, 7, 12);
