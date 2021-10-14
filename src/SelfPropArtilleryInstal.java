@@ -51,10 +51,10 @@ public class SelfPropArtilleryInstal {
 
     // Признак наличия камуфляжа
     public boolean camouflage;
-    private void setTrunk(boolean trunk) {
-        camouflage = trunk;
+    private void setCamouflage(boolean camouflage) {
+        this.camouflage = camouflage;
     }
-    public boolean isTrunk() {
+    public boolean isCamouflage() {
         return camouflage;
     }
 
