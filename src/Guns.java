@@ -5,8 +5,8 @@ public class Guns {
     private NumberGuns numberGuns;
 
     // Открытое числовое свойство, через которое можно в поле-перечисление занести значение
-    public void setNumberGuns(int quantity) {
-        numberGuns = NumberGuns.getNumber(quantity);
+    public void setNumberGuns(int number) {
+        numberGuns = NumberGuns.getNumber(number);
     }
 
     public void drawGuns(Graphics g, Color color, int startPosX, int startPosY) {
