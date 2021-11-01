@@ -60,7 +60,7 @@ public class SelfPropArtilleryInstal extends ArmoredCar {
             case 2:
                 additionalElems = new RoundedGuns();
         }
-        additionalElems.setNumber(rnd.nextInt(4));
+        additionalElems.setNumber(rnd.nextInt(3));
     }
 
     @Override
