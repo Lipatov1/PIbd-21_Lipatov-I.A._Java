@@ -1,44 +1,9 @@
 import java.awt.*;
 import java.util.Random;
 
-public class SelfPropArtilleryInstal {
-    // Поле от классаДоп.
-    private Guns guns;
-
-    // Левая и правая координаты отрисовки cамоходной артиллерийской установки
-    private int startPosX;
-    private int startPosY;
-
-    // Ширина и высота окна отрисовки
-    private int pictureWidth;
-    private int pictureHeight;
-
-    // Ширина и высота отрисовки cамоходной артиллерийской установки
-    private final int selfPropArtilleryInstalWidth = 210;
-    private final int selfPropArtilleryInstalHeight = 85;
-
-    // Максимальная скорость cамоходной артиллерийской установки
-    public int maxSpeed;
-    private void setMaxSpeed(int maxSpeed) { this.maxSpeed = maxSpeed; }
-    public int getMaxSpeed() { return maxSpeed; }
-
-    // Максимальный вес cамоходной артиллерийской установки
-    public float weight;
-    private void setWeight(float weight) {
-        this.weight = weight;
-    }
-    public float getWeight() {
-        return weight;
-    }
-
-    // Основной цвет cамоходной артиллерийской установки
-    public Color mainColor;
-    private void setMainColor(Color mainColor) {
-        this.mainColor = mainColor;
-    }
-    public Color getMainColor() {
-        return mainColor;
-    }
+public class SelfPropArtilleryInstal extends ArmoredCar {
+    // Закрытое поле от ИнтерДоп
+    private AdditionalElems additionalElems;
 
     // Дополнительный цвет cамоходной артиллерийской установки
     public Color dopColor;
@@ -67,83 +32,64 @@ public class SelfPropArtilleryInstal {
         return star;
     }
 
+    // Признак наличия гусеницы
+    public boolean caterpillar;
+    private void setCaterpillar(boolean caterpillar) {
+        this.caterpillar = caterpillar;
+    }
+    public boolean isCaterpillar() {
+        return caterpillar;
+    }
+
     // Конструктор
-    public SelfPropArtilleryInstal(int maxSpeed, float weight, Color mainColor, Color dopColor, boolean camouflage, boolean star) {
-        this.maxSpeed = maxSpeed;
-        this.weight = weight;
-        this.mainColor = mainColor;
+    public SelfPropArtilleryInstal(int maxSpeed, float weight, Color mainColor, Color dopColor, boolean camouflage, boolean star, boolean caterpillar) {
+        super(maxSpeed, weight, mainColor);
         this.dopColor = dopColor;
         this.camouflage = camouflage;
         this.star = star;
-        guns = new Guns();
+        this.caterpillar = caterpillar;
         Random rnd = new Random();
-        guns.setNumberGuns(rnd.nextInt(4));
-    }
-
-    // Установка позиции cамоходной артиллерийской установки
-    public void setPosition(int x, int y, int width, int height) {
-        startPosX = x;
-        startPosY = y;
-        pictureHeight = height;
-        pictureWidth = width;
-    }
-
-    // Изменение направления перемещения
-    public void moveTransport(Direction direction) {
-        float step = maxSpeed * 100 / weight;
-        switch (direction) {
-            case Right:
-                if (startPosX + step < pictureWidth - selfPropArtilleryInstalWidth) {
-                    startPosX += step;
-                }
+        // Инициализация поля от ИнтерДоп
+        switch (rnd.nextInt(3)) {
+            case 0:
+                additionalElems = new RectangleGuns();
                 break;
-            case Left:
-                if (startPosX - step > 0) {
-                    startPosX -= step;
-                }
+            case 1:
+                additionalElems = new TriangularGuns();
                 break;
-            case Up:
-                if (startPosY - step > 0) {
-                    startPosY -= step;
-                }
-                break;
-            case Down:
-                if (startPosY + step < pictureHeight - selfPropArtilleryInstalHeight)	{
-                    startPosY += step;
-                }
-                break;
+            case 2:
+                additionalElems = new RoundedGuns();
         }
+        additionalElems.setNumber(rnd.nextInt(3));
     }
 
+    @Override
     // Отрисовка cамоходной артиллерийской установки
     public void drawTransport(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
+        super.drawTransport(g2);
 
         // Отрисовываем гусеницу
-        g2.setColor(Color.decode("#35391f"));
-        g2.fillRoundRect(startPosX, startPosY + 40, 210, 45, 40, 50);
-
-        // Отрисовывем колеса гусеницы
-        g2.setColor(Color.BLACK);
-        g2.setStroke(new BasicStroke(2));
-        g2.drawOval(startPosX + 5, startPosY + 45, 35, 35);
-        g2.drawOval(startPosX + 170, startPosY + 45, 35, 35);
-        g2.drawOval(startPosX + 50, startPosY + 62, 20, 20);
-        g2.drawOval(startPosX + 80, startPosY + 62, 20, 20);
-        g2.drawOval(startPosX + 110, startPosY + 62, 20, 20);
-        g2.drawOval(startPosX + 140, startPosY + 62, 20, 20);
-        g2.fillOval(startPosX + 70, startPosY + 45, 10, 10);
-        g2.fillOval(startPosX + 100, startPosY + 45, 10, 10);
-        g2.fillOval(startPosX + 130, startPosY + 45, 10, 10);
-
-        // Отрисовываем башню
-        g2.setColor(mainColor);
-        g.fillRect(startPosX + 7, startPosY + 30, 198, 20);
-        g.fillRect(startPosX + 60, startPosY, 90, 30);
+        if (caterpillar) {
+            g2.setColor(Color.decode("#35391f"));
+            g.fillRect(startPosX + 25, startPosY + 50, 160, 35);
+            g2.setColor(Color.BLACK);
+            g.drawOval(startPosX + 5, startPosY + 45, 35, 35);
+            g.drawOval(startPosX + 170, startPosY + 45, 35, 35);
+            g.drawOval(startPosX + 50, startPosY + 62, 20, 20);
+            g.drawOval(startPosX + 80, startPosY + 62, 20, 20);
+            g.drawOval(startPosX + 110, startPosY + 62, 20, 20);
+            g.drawOval(startPosX + 140, startPosY + 62, 20, 20);
+            g.fillOval(startPosX + 70, startPosY + 45, 10, 10);
+            g.fillOval(startPosX + 100, startPosY + 45, 10, 10);
+            g.fillOval(startPosX + 130, startPosY + 45, 10, 10);
+            g2.setColor(mainColor);
+            g.fillRect(startPosX + 7, startPosY + 30, 198, 20);
+        }
 
         // Отрисовываем камуфляж
-        g2.setColor(Color.decode("#595677"));
         if (camouflage) {
+            g2.setColor(Color.decode("#595677"));
             g.fillOval(startPosX + 12, startPosY + 34, 25, 12);
             g.fillOval(startPosX + 70, startPosY + 32, 12, 12);
             g.fillOval(startPosX + 70, startPosY + 8, 10, 10);
@@ -161,7 +107,7 @@ public class SelfPropArtilleryInstal {
                     new int[]{startPosY + 2, startPosY + 17, startPosY + 17, startPosY + 24, startPosY + 38, startPosY + 30, startPosY + 38, startPosY + 24, startPosY + 17, startPosY + 17}, 10);
         }
 
-        // Метод отрисовки классаДоп
-        guns.drawGuns(g2, mainColor, startPosX, startPosY);
+        // Отрисовка дополнительных элементов (форма орудий)
+        additionalElems.draw(g, mainColor, startPosX, startPosY);
     }
 }
