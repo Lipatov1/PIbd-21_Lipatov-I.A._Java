@@ -11,7 +11,7 @@ public class PanelBase extends JPanel {
         }
     }
 
-    public Base<ArmoredCar, AdditionalElems> getBusStation() {
+    public Base<ArmoredCar, AdditionalElems> getBase() {
         return base;
     }
 
