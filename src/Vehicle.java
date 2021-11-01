@@ -1,6 +1,6 @@
 import java.awt.*;
 
-public abstract class MilitaryEquipment implements ITransport {
+public abstract class Vehicle implements ITransport {
     // Левая и правая координаты отрисовки военной техники
     protected int startPosX;
     protected int startPosY;

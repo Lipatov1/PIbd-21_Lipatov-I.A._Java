@@ -5,13 +5,14 @@ public enum NumberGuns {
 
     public static NumberGuns getNumber(int number) {
         switch (number) {
-            case 1:
+            case 0:
                 return NumberGuns.one;
-            case 2:
+            case 1:
                 return NumberGuns.two;
-            case 3:
+            case 2:
                 return NumberGuns.three;
+            default:
+                return NumberGuns.one;
         }
-        return null;
     }
 }

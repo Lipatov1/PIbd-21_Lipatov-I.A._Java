@@ -13,13 +13,11 @@ public class RoundedGuns implements AdditionalElems {
     @Override
     public void draw(Graphics g, Color color, int startPosX, int startPosY) {
         g.setColor(color);
-        if (numberGuns != null) {
-            g.fillRoundRect(startPosX + 145, startPosY + 5, 50, 7, 20, 20);
-            if (numberGuns != NumberGuns.one) {
-                g.fillRoundRect(startPosX + 20, startPosY + 8, 45, 8, 20, 20);
-                if (numberGuns != NumberGuns.two) {
-                    g.fillRoundRect(startPosX + 145, startPosY + 18, 65, 7, 20, 20);
-                }
+        g.fillRoundRect(startPosX + 145, startPosY + 5, 50, 7, 20, 20);
+        if (numberGuns != NumberGuns.one) {
+            g.fillRoundRect(startPosX + 20, startPosY + 8, 45, 8, 20, 20);
+            if (numberGuns != NumberGuns.two) {
+                g.fillRoundRect(startPosX + 145, startPosY + 18, 65, 7, 20, 20);
             }
         }
     }

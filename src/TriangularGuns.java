@@ -13,19 +13,17 @@ public class TriangularGuns implements AdditionalElems {
     @Override
     public void draw(Graphics g, Color color, int startPosX, int startPosY) {
         g.setColor(color);
-        if (numberGuns != null) {
+        g.fillPolygon(
+                new int[]{startPosX + 145, startPosX + 195, startPosX + 195, startPosX + 145},
+                new int[]{startPosY + 5, startPosY + 7, startPosY + 9, startPosY + 12}, 4);
+        if (numberGuns != NumberGuns.one) {
             g.fillPolygon(
-                    new int[]{startPosX + 145, startPosX + 195, startPosX + 195, startPosX + 145},
-                    new int[]{startPosY + 5, startPosY + 7, startPosY + 9, startPosY + 12}, 4);
-            if (numberGuns != NumberGuns.one) {
+                    new int[]{startPosX + 65, startPosX + 20, startPosX + 20, startPosX + 65},
+                    new int[]{startPosY + 8, startPosY + 11, startPosY + 13, startPosY + 16}, 4);
+            if (numberGuns != NumberGuns.two) {
                 g.fillPolygon(
-                        new int[]{startPosX + 65, startPosX + 20, startPosX + 20, startPosX + 65},
-                        new int[]{startPosY + 8, startPosY + 11, startPosY + 13, startPosY + 16}, 4);
-                if (numberGuns != NumberGuns.two) {
-                    g.fillPolygon(
-                            new int[]{startPosX + 145, startPosX + 210, startPosX + 210, startPosX + 145},
-                            new int[]{startPosY + 18, startPosY + 20, startPosY + 22, startPosY + 25}, 4);
-                }
+                        new int[]{startPosX + 145, startPosX + 210, startPosX + 210, startPosX + 145},
+                        new int[]{startPosY + 18, startPosY + 20, startPosY + 22, startPosY + 25}, 4);
             }
         }
     }

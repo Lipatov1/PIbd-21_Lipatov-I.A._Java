@@ -70,20 +70,22 @@ public class SelfPropArtilleryInstal extends ArmoredCar {
         super.drawTransport(g2);
 
         // Отрисовываем гусеницу
-        g2.setColor(Color.decode("#35391f"));
-        g.fillRect(startPosX + 25, startPosY + 50, 160, 35);
-        g2.setColor(Color.BLACK);
-        g.drawOval(startPosX + 5, startPosY + 45, 35, 35);
-        g.drawOval(startPosX + 170, startPosY + 45, 35, 35);
-        g.drawOval(startPosX + 50, startPosY + 62, 20, 20);
-        g.drawOval(startPosX + 80, startPosY + 62, 20, 20);
-        g.drawOval(startPosX + 110, startPosY + 62, 20, 20);
-        g.drawOval(startPosX + 140, startPosY + 62, 20, 20);
-        g.fillOval(startPosX + 70, startPosY + 45, 10, 10);
-        g.fillOval(startPosX + 100, startPosY + 45, 10, 10);
-        g.fillOval(startPosX + 130, startPosY + 45, 10, 10);
-        g2.setColor(mainColor);
-        g.fillRect(startPosX + 7, startPosY + 30, 198, 20);
+        if (caterpillar) {
+            g2.setColor(Color.decode("#35391f"));
+            g.fillRect(startPosX + 25, startPosY + 50, 160, 35);
+            g2.setColor(Color.BLACK);
+            g.drawOval(startPosX + 5, startPosY + 45, 35, 35);
+            g.drawOval(startPosX + 170, startPosY + 45, 35, 35);
+            g.drawOval(startPosX + 50, startPosY + 62, 20, 20);
+            g.drawOval(startPosX + 80, startPosY + 62, 20, 20);
+            g.drawOval(startPosX + 110, startPosY + 62, 20, 20);
+            g.drawOval(startPosX + 140, startPosY + 62, 20, 20);
+            g.fillOval(startPosX + 70, startPosY + 45, 10, 10);
+            g.fillOval(startPosX + 100, startPosY + 45, 10, 10);
+            g.fillOval(startPosX + 130, startPosY + 45, 10, 10);
+            g2.setColor(mainColor);
+            g.fillRect(startPosX + 7, startPosY + 30, 198, 20);
+        }
 
         // Отрисовываем камуфляж
         if (camouflage) {

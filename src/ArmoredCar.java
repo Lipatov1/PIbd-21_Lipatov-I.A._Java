@@ -1,6 +1,6 @@
 import java.awt.*;
 
-public class ArmoredCar extends MilitaryEquipment {
+public class ArmoredCar extends Vehicle {
     // Ширина и высота отрисовки бронированной машины
     protected int armoredCarWidth = 210;
     protected int armoredCarHeight = 85;
@@ -31,16 +31,19 @@ public class ArmoredCar extends MilitaryEquipment {
                     startPosX += step;
                 }
                 break;
+
             case Left:
                 if (startPosX - step > 0) {
                     startPosX -= step;
                 }
                 break;
+
             case Up:
                 if (startPosY - step > 0) {
                     startPosY -= step;
                 }
                 break;
+
             case Down:
                 if (startPosY + step < pictureHeight - armoredCarHeight) {
                     startPosY += step;

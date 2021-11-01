@@ -7,7 +7,7 @@ public class FrameMilitaryEquipment extends JFrame {
 
     public FrameMilitaryEquipment() {
         setTitle("Военная техника");
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(900, 500);
         setLocation(400, 300);
         setResizable(false);

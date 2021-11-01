@@ -2,7 +2,7 @@ import java.awt.Graphics;
 import javax.swing.JPanel;
 
 public class PanelMilitaryEquipment extends JPanel {
-    private MilitaryEquipment militaryEquipment;
+    private Vehicle militaryEquipment;
 
     public void paintComponent(Graphics g) {
         if (militaryEquipment != null) {
@@ -10,11 +10,11 @@ public class PanelMilitaryEquipment extends JPanel {
         }
     }
 
-    public void initMilitaryEquipment(MilitaryEquipment militaryEquipment) {
+    public void initMilitaryEquipment(Vehicle militaryEquipment) {
         this.militaryEquipment = militaryEquipment;
     }
 
-    public MilitaryEquipment getMilitaryEquipment() {
+    public Vehicle getMilitaryEquipment() {
         return militaryEquipment;
     }
 }
