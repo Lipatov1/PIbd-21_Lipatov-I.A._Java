@@ -2,20 +2,23 @@ import javax.swing.*;
 import java.awt.*;
 
 public class PanelBase extends JPanel {
-    private final Base<ArmoredCar, AdditionalElems> base;
+    private final BaseCollection baseCollection;
+    private String selectedItem = null;
 
     protected void paintComponent(Graphics g) {
-        Graphics2D g2 = (Graphics2D) g;
-        if (base != null) {
-            base.drawBase(g2);
+        if (selectedItem != null) {
+            Graphics2D g2 = (Graphics2D) g;
+            if (baseCollection != null) {
+                baseCollection.get(selectedItem).drawBase(g2);
+            }
         }
     }
 
-    public Base<ArmoredCar, AdditionalElems> getBase() {
-        return base;
+    public void setSelectedItem(String selectedItem) {
+        this.selectedItem = selectedItem;
     }
 
-    public PanelBase(Base<ArmoredCar, AdditionalElems> base) {
-        this.base = base;
+    public PanelBase(BaseCollection baseCollection) {
+        this.baseCollection = baseCollection;
     }
 }

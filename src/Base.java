@@ -1,8 +1,11 @@
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Base<T extends ITransport, H extends AdditionalElems> {
     // Массив объектов, которые храним
-    private final Object[] places;
+    private final List<T> places;
+    private final int maxCount;
 
     // Ширина и высота окна отрисовки
     private final int pictureWidth;
@@ -15,30 +18,27 @@ public class Base<T extends ITransport, H extends AdditionalElems> {
     public Base(int pictureWidth, int pictureHeight) {
         int columnsNumber = pictureWidth / placeSizeWidth;
         int rowsNumber = pictureHeight / placeSizeHeight;
-        places = new Object[columnsNumber * rowsNumber];
+        maxCount = columnsNumber * rowsNumber;
+        places = new ArrayList<>();
         this.pictureWidth = pictureWidth;
         this.pictureHeight = pictureHeight;
     }
 
     // Перегрузка оператора сложения
     public int add(T transport) {
-        int columnNumber = pictureWidth / placeSizeWidth;
-        for (int i = 0; i < places.length; i++) {
-            if (places[i] == null) {
-                transport.setPosition(10 + placeSizeWidth * (i % columnNumber), 10 + placeSizeHeight * (i / columnNumber), pictureWidth, pictureHeight);
-                places[i] = transport;
-                return i;
-            }
+        if (places.size() < maxCount) {
+            places.add(transport);
+            return 1;
         }
         return -1;
     }
 
     // Перегрузка оператора вычитания
     public T remove(int index) {
-        if (index >= 0 && index < places.length && places[index] != null) {
-            Object temp = places[index];
-            places[index] = null;
-            return (T) (temp);
+        if (index >= 0 && index < maxCount && places.get(index) != null) {
+            T militaryEquipment = places.get(index);
+            places.remove(index);
+            return militaryEquipment;
         } else {
             return null;
         }
@@ -68,11 +68,10 @@ public class Base<T extends ITransport, H extends AdditionalElems> {
     // Метод отрисовки парковки
     public void drawBase(Graphics2D g) {
         drawMarking(g);
-        for (Object place : places) {
-            if (place != null) {
-                T placeT = (T) place;
-                placeT.drawTransport(g);
-            }
+        int columnNumber = pictureWidth / placeSizeWidth;
+        for (int i = 0; i < places.size(); i++) {
+            places.get(i).setPosition(10 + placeSizeWidth * (i % columnNumber), 10 + placeSizeHeight * (i / columnNumber), pictureWidth, pictureHeight);
+            places.get(i).drawTransport(g);
         }
     }
 
@@ -85,5 +84,13 @@ public class Base<T extends ITransport, H extends AdditionalElems> {
             }
             g.drawLine(i * placeSizeWidth, 0, i * placeSizeWidth, (pictureHeight / placeSizeHeight) * placeSizeHeight);
         }
+    }
+
+    // Индексатор для получения элементов из списка
+    public T get(int index) {
+        if (index >= 0 && index < places.size()) {
+            return places.get(index);
+        }
+        return null;
     }
 }
