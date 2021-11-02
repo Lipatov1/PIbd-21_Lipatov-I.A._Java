@@ -3,7 +3,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Base<T extends ITransport, H extends AdditionalElems> {
-    // Массив объектов, которые храним
     private final List<T> places;
     private final int maxCount;
 
