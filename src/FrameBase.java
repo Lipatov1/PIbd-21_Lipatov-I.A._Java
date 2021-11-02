@@ -69,7 +69,7 @@ public class FrameBase extends JFrame {
             if (base.add(armoredCar) != -1) {
                 repaint();
             } else {
-                JOptionPane.showMessageDialog(this, "База переполнена", "Ошибка", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "База переполнена");
             }
         }
     }
@@ -85,7 +85,7 @@ public class FrameBase extends JFrame {
                 if (base.add(armoredCar) != -1) {
                     repaint();
                 } else {
-                    JOptionPane.showMessageDialog(this, "База переполнена", "Ошибка", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "База переполнена");
                 }
             }
         }
