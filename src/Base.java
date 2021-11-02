@@ -83,7 +83,7 @@ public class Base<T extends ITransport, H extends AdditionalElems> {
             for (int j = 0; j < pictureHeight / placeSizeHeight + 1; j++) {
                 g.drawLine(i * placeSizeWidth, j * placeSizeHeight, i * placeSizeWidth + placeSizeWidth / 2, j * placeSizeHeight);
             }
-            g.drawLine(i * placeSizeWidth,0, i * placeSizeWidth, (pictureHeight / placeSizeHeight) * placeSizeHeight);
+            g.drawLine(i * placeSizeWidth, 0, i * placeSizeWidth, (pictureHeight / placeSizeHeight) * placeSizeHeight);
         }
     }
 }
