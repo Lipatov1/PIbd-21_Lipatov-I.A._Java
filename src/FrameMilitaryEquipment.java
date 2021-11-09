@@ -14,18 +14,6 @@ public class FrameMilitaryEquipment extends JFrame {
         setVisible(true);
         setLayout(null);
 
-        // Создание, размещение, назначения действия и добавление кнопки "Создать бронированный автомобиль"
-        JButton buttonCreateArmoredCar = new JButton("Создать бронированный автомобиль");
-        buttonCreateArmoredCar.setBounds(new Rectangle(12, 12, 255, 25));
-        buttonCreateArmoredCar.addActionListener(e -> initArmoredCar());
-        add(buttonCreateArmoredCar);
-
-        // Создание, размещение, назначения действия и добавление кнопки "Создать cамоходную артиллерийскую установку"
-        JButton buttonCreateSelfPropArtilleryInstal = new JButton("Создать cамоходную артиллерийскую установку");
-        buttonCreateSelfPropArtilleryInstal.setBounds(new Rectangle(279, 12, 325, 25));
-        buttonCreateSelfPropArtilleryInstal.addActionListener(e -> initSelfPropArtilleryInstal());
-        add(buttonCreateSelfPropArtilleryInstal);
-
         // Создание, размещение, добавление и установка названия для кнопки вправо
         JButton buttonRight = new JButton(new ImageIcon("resources/right.png"));
         buttonRight.setBounds(new Rectangle(842, 419, 30, 30));
@@ -53,6 +41,11 @@ public class FrameMilitaryEquipment extends JFrame {
         buttonUp.setName("up");
         buttonUp.addActionListener(e -> buttonMove_Click(buttonUp));
         add(buttonUp);
+
+        panelMilitaryEquipment = new PanelMilitaryEquipment();
+        add(panelMilitaryEquipment);
+        panelMilitaryEquipment.setBounds(0, 0, 886, 463);
+        repaint();
     }
 
     private void buttonMove_Click(JButton button) {
@@ -74,24 +67,10 @@ public class FrameMilitaryEquipment extends JFrame {
         repaint();
     }
 
-    public void addPanelSelfPropArtilleryInstal(PanelMilitaryEquipment panel) {
-        panelMilitaryEquipment = panel;
-        add(panelMilitaryEquipment);
-        panelMilitaryEquipment.setBounds(0, 0, 886, 463);
-        repaint();
-    }
-
-    private void initArmoredCar() {
+    public void setTransport(ITransport militaryEquipment) {
         Random random = new Random();
-        panelMilitaryEquipment.initMilitaryEquipment(new ArmoredCar(random.nextInt(200) + 100, random.nextInt(1000) + 1000, Color.decode("#424724")));
-        panelMilitaryEquipment.getMilitaryEquipment().setPosition(random.nextInt(90) + 10, random.nextInt(90) + 10, panelMilitaryEquipment.getWidth(), panelMilitaryEquipment.getHeight());
-        repaint();
-    }
-
-    private void initSelfPropArtilleryInstal() {
-        Random random = new Random();
-        panelMilitaryEquipment.initMilitaryEquipment(new SelfPropArtilleryInstal(random.nextInt(200) + 100, random.nextInt(1000) + 1000, Color.decode("#424724"), Color.red, true, true, true));
-        panelMilitaryEquipment.getMilitaryEquipment().setPosition(random.nextInt(90) + 10, random.nextInt(90) + 10, panelMilitaryEquipment.getWidth(), panelMilitaryEquipment.getHeight());
+        militaryEquipment.setPosition(random.nextInt(90) + 10, random.nextInt(90) + 10, panelMilitaryEquipment.getWidth(), panelMilitaryEquipment.getHeight());
+        panelMilitaryEquipment.initMilitaryEquipment(militaryEquipment);
         repaint();
     }
 }
