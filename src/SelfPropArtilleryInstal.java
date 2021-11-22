@@ -7,7 +7,7 @@ public class SelfPropArtilleryInstal extends ArmoredCar {
 
     // Дополнительный цвет cамоходной артиллерийской установки
     public Color dopColor;
-    private void setDopColor(Color dopColor) {
+    public  void setDopColor(Color dopColor) {
         this.dopColor = dopColor;
     }
     public Color getDopColor() {
@@ -41,6 +41,10 @@ public class SelfPropArtilleryInstal extends ArmoredCar {
         return caterpillar;
     }
 
+    public void setAdditionalElems(AdditionalElems additionalElems) {
+        this.additionalElems = additionalElems;
+    }
+
     // Конструктор
     public SelfPropArtilleryInstal(int maxSpeed, float weight, Color mainColor, Color dopColor, boolean camouflage, boolean star, boolean caterpillar) {
         super(maxSpeed, weight, mainColor);
@@ -48,19 +52,6 @@ public class SelfPropArtilleryInstal extends ArmoredCar {
         this.camouflage = camouflage;
         this.star = star;
         this.caterpillar = caterpillar;
-        Random rnd = new Random();
-        // Инициализация поля от ИнтерДоп
-        switch (rnd.nextInt(3)) {
-            case 0:
-                additionalElems = new RectangleGuns();
-                break;
-            case 1:
-                additionalElems = new TriangularGuns();
-                break;
-            case 2:
-                additionalElems = new RoundedGuns();
-        }
-        additionalElems.setNumber(rnd.nextInt(3));
     }
 
     @Override
@@ -108,6 +99,8 @@ public class SelfPropArtilleryInstal extends ArmoredCar {
         }
 
         // Отрисовка дополнительных элементов (форма орудий)
-        additionalElems.draw(g, mainColor, startPosX, startPosY);
+        if (additionalElems != null) {
+            additionalElems.draw(g, mainColor, startPosX, startPosY);
+        }
     }
 }

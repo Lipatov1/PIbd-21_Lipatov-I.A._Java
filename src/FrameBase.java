@@ -58,24 +58,18 @@ public class FrameBase extends JFrame {
         buttonRemoveBase.addActionListener(e -> delBase());
         add(buttonRemoveBase);
 
-        // Создание, размещение, назначения действия и добавление кнопки "Припарковать бронированный автомобиль"
-        JButton buttonSetArmoredCar = new JButton("<html><center>Припарковать<br>бронированный<br>автомобиль</center></html>");
-        buttonSetArmoredCar.setBounds(910, 209, 140, 60);
-        buttonSetArmoredCar.addActionListener(e -> setArmoredCar());
-        add(buttonSetArmoredCar);
-
-        // Создание, размещение, назначения действия и добавление кнопки "Припарковать cамоходную артиллерийскую установку"
-        JButton buttonSetArtillery = new JButton("<html><center>Припарковать<br>cамоходную<br>артиллерийскую<br>установку</center></html>");
-        buttonSetArtillery.setBounds(910, 274, 140, 73);
-        buttonSetArtillery.addActionListener(e -> setSelfPropArtilleryInstal());
-        add(buttonSetArtillery);
+        // Создание, размещение, назначения действия и добавление кнопки "Добавить военную технику"
+        JButton buttonSetMilitaryEquipment = new JButton("<html><center>Добавить военную технику</center></html>");
+        buttonSetMilitaryEquipment.setBounds(910, 209, 140, 47);
+        buttonSetMilitaryEquipment.addActionListener(e -> setMilitaryEquipment());
+        add(buttonSetMilitaryEquipment);
 
         // Создание JPanel, добавление границы с заголовком и размещение
         JPanel groupBoxTakeTechnic = new JPanel();
         groupBoxTakeTechnic.setLayout(null);
         Border centerBorder = BorderFactory.createTitledBorder("Забрать технику:");
         groupBoxTakeTechnic.setBorder(centerBorder);
-        groupBoxTakeTechnic.setBounds(908, 352, 144, 105);
+        groupBoxTakeTechnic.setBounds(908, 260, 144, 105);
 
         // Создание, размещение и добавление "Место:"
         JLabel labelPlace = new JLabel("Место:");
@@ -104,38 +98,23 @@ public class FrameBase extends JFrame {
         repaint();
     }
 
-    private void setArmoredCar() {
-        if (listBoxBases.getSelectedIndex() >= 0) {
-            JColorChooser colorDialog = new JColorChooser();
-            JOptionPane.showMessageDialog(this, colorDialog);
-            if (colorDialog.getColor() != null) {
-                var armoredCar = new ArmoredCar(100, 1000, colorDialog.getColor());
-                if (baseCollection.get(listBoxBases.getSelectedValue()).add(armoredCar) != -1) {
-                    repaint();
-                } else {
-                    JOptionPane.showMessageDialog(this, "База переполнена");
-                }
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "База не выбрана", "Ошибка", JOptionPane.ERROR_MESSAGE);
-        }
-    }
+//    private void setMilitaryEquipment() {
+//        PanelMilitaryEquipmentConfig panelMilitaryEquipmentConfig = new PanelMilitaryEquipmentConfig(this);
+//    }
 
-    private void setSelfPropArtilleryInstal() {
+    private void setMilitaryEquipment() {
         if (listBoxBases.getSelectedIndex() >= 0) {
-            JColorChooser colorDialog = new JColorChooser();
-            JOptionPane.showMessageDialog(this, colorDialog);
-            if (colorDialog.getColor() != null) {
-                JColorChooser additionalColorDialog = new JColorChooser();
-                JOptionPane.showMessageDialog(this, additionalColorDialog);
-                if (additionalColorDialog.getColor() != null) {
-                    var selfPropArtilleryInstal = new SelfPropArtilleryInstal(100, 1000, colorDialog.getColor(), additionalColorDialog.getColor(), true, true, true);
-                    if (baseCollection.get(listBoxBases.getSelectedValue()).add(selfPropArtilleryInstal) != -1) {
-                        repaint();
-                    } else {
-                        JOptionPane.showMessageDialog(this, "База переполнена");
-                    }
-                }
+            PanelMilitaryEquipmentConfig panelMilitaryEquipmentConfig = new PanelMilitaryEquipmentConfig(this);
+
+            //Получаем автобус из панельки диалогового окна
+            Vehicle militaryEquipment = panelMilitaryEquipmentConfig.getMilitaryEquipment();
+
+            if (militaryEquipment == null)
+                return;
+            if (baseCollection.get(listBoxBases.getSelectedValue()).add(militaryEquipment) != -1) {
+                repaint();
+            } else {
+                JOptionPane.showMessageDialog(this, "База переполнена");
             }
         } else {
             JOptionPane.showMessageDialog(this, "База не выбрана", "Ошибка", JOptionPane.ERROR_MESSAGE);
