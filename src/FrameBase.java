@@ -98,15 +98,11 @@ public class FrameBase extends JFrame {
         repaint();
     }
 
-//    private void setMilitaryEquipment() {
-//        PanelMilitaryEquipmentConfig panelMilitaryEquipmentConfig = new PanelMilitaryEquipmentConfig(this);
-//    }
-
     private void setMilitaryEquipment() {
         if (listBoxBases.getSelectedIndex() >= 0) {
             PanelMilitaryEquipmentConfig panelMilitaryEquipmentConfig = new PanelMilitaryEquipmentConfig(this);
 
-            //Получаем автобус из панельки диалогового окна
+            //Получаем технику из панельки диалогового окна
             Vehicle militaryEquipment = panelMilitaryEquipmentConfig.getMilitaryEquipment();
 
             if (militaryEquipment == null)
