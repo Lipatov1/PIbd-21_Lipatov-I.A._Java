@@ -102,7 +102,7 @@ public class FrameBase extends JFrame {
         if (listBoxBases.getSelectedIndex() >= 0) {
             PanelMilitaryEquipmentConfig panelMilitaryEquipmentConfig = new PanelMilitaryEquipmentConfig(this);
 
-            //Получаем технику из панельки диалогового окна
+            // Получаем технику из panelMilitaryEquipmentConfig
             Vehicle militaryEquipment = panelMilitaryEquipmentConfig.getMilitaryEquipment();
 
             if (militaryEquipment == null)

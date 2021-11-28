@@ -7,7 +7,7 @@ import java.awt.event.MouseListener;
 
 public class PanelMilitaryEquipmentConfig extends JDialog {
     private Vehicle militaryEquipment;
-    private Color busColor;
+    private Color technicColor;
     private AdditionalElems additionalElems;
     private boolean applyCheck;
     private final PanelMilitaryEquipment panelMilitaryEquipment;
@@ -278,7 +278,7 @@ public class PanelMilitaryEquipmentConfig extends JDialog {
             public void mousePressed(MouseEvent e) {
                 setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                 JPanel panelColor = (JPanel) e.getSource();
-                busColor = panelColor.getBackground();
+                technicColor = panelColor.getBackground();
             }
 
             @Override
@@ -288,7 +288,7 @@ public class PanelMilitaryEquipmentConfig extends JDialog {
                             e.getX() + ((JComponent) e.getSource()).getX() <= labelMainColor.getX() + labelMainColor.getWidth() &&
                             e.getY() + ((JComponent) e.getSource()).getY() >= labelMainColor.getY() &&
                             e.getY() + ((JComponent) e.getSource()).getY() <= labelMainColor.getY() + labelMainColor.getHeight()) {
-                        panelMilitaryEquipment.getMilitaryEquipment().setMainColor(busColor);
+                        panelMilitaryEquipment.getMilitaryEquipment().setMainColor(technicColor);
                         repaint();
                     } else if (e.getX() + ((JComponent) e.getSource()).getX() >= labelAdditionalColor.getX() &&
                             e.getX() + ((JComponent) e.getSource()).getX() <= labelAdditionalColor.getX() + labelAdditionalColor.getWidth() &&
@@ -296,12 +296,12 @@ public class PanelMilitaryEquipmentConfig extends JDialog {
                             e.getY() + ((JComponent) e.getSource()).getY() <= labelAdditionalColor.getY() + labelAdditionalColor.getHeight() &&
                             panelMilitaryEquipment.getMilitaryEquipment() instanceof SelfPropArtilleryInstal) {
                         SelfPropArtilleryInstal selfPropArtilleryInstal = (SelfPropArtilleryInstal) panelMilitaryEquipment.getMilitaryEquipment();
-                        selfPropArtilleryInstal.setDopColor(busColor);
+                        selfPropArtilleryInstal.setDopColor(technicColor);
                         repaint();
                     }
                 }
                 setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-                busColor = null;
+                technicColor = null;
             }
         };
         panelRed.addMouseListener(listenerColor);
@@ -320,12 +320,12 @@ public class PanelMilitaryEquipmentConfig extends JDialog {
                 JLabel labelColor = (JLabel) e.getSource();
                 switch (labelColor.getText()) {
                     case "Основной цвет":
-                        if (panelMilitaryEquipment.getMilitaryEquipment() != null && busColor != null) {
+                        if (panelMilitaryEquipment.getMilitaryEquipment() != null && technicColor != null) {
                             setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                         }
                         break;
                     case "Доп цвет":
-                        if (panelMilitaryEquipment.getMilitaryEquipment() instanceof SelfPropArtilleryInstal && busColor != null) {
+                        if (panelMilitaryEquipment.getMilitaryEquipment() instanceof SelfPropArtilleryInstal && technicColor != null) {
                             setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                         }
                         break;
@@ -334,7 +334,7 @@ public class PanelMilitaryEquipmentConfig extends JDialog {
 
             @Override
             public void mouseExited(MouseEvent e) {
-                if (busColor != null) {
+                if (technicColor != null) {
                     setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                 }
             }
