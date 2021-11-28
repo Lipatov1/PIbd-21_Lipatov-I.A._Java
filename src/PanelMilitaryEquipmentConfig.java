@@ -324,7 +324,7 @@ public class PanelMilitaryEquipmentConfig extends JDialog {
                             setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                         }
                         break;
-                    case "Доп цвет":
+                    case "Дополнительный цвет":
                         if (panelMilitaryEquipment.getMilitaryEquipment() instanceof SelfPropArtilleryInstal && technicColor != null) {
                             setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                         }
