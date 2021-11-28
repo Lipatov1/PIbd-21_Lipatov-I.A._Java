@@ -133,35 +133,30 @@ public class PanelMilitaryEquipmentConfig extends JDialog {
         panelWhite.setBackground(new Color(255, 255, 255, 255));
         panelWhite.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         panelWhite.setBounds(245, 70, 45, 45);
-        //panelRed.addMouseListener(listenerColor);
         groupBoxColors.add(panelWhite);
 
         JPanel panelGray = new JPanel();
         panelGray.setBackground(new Color(128, 128, 128, 255));
         panelGray.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         panelGray.setBounds(26, 131, 45, 45);
-        //panelRed.addMouseListener(listenerColor);
         groupBoxColors.add(panelGray);
 
         JPanel panelOrange = new JPanel();
         panelOrange.setBackground(new Color(255, 165, 0, 255));
         panelOrange.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         panelOrange.setBounds(99, 131, 45, 45);
-        //panelRed.addMouseListener(listenerColor);
         groupBoxColors.add(panelOrange);
 
         JPanel panelGreen = new JPanel();
         panelGreen.setBackground(new Color(0, 128, 0, 255));
         panelGreen.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         panelGreen.setBounds(172, 131, 45, 45);
-        //panelRed.addMouseListener(listenerColor);
         groupBoxColors.add(panelGreen);
 
         JPanel panelBlue = new JPanel();
         panelBlue.setBackground(new Color(0, 0, 255, 255));
         panelBlue.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         panelBlue.setBounds(245, 131, 45, 45);
-        //panelRed.addMouseListener(listenerColor);
         groupBoxColors.add(panelBlue);
 
         // Создание, добавление границы с заголовком и размещение JPanel для выбора формы и кол-ва орудий
