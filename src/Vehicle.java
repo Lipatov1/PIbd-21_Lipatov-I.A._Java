@@ -32,7 +32,7 @@ public abstract class Vehicle implements ITransport {
     public Color getMainColor() {
         return mainColor;
     }
-    protected void setMainColor(Color mainColor) {
+    public void setMainColor(Color mainColor) {
         this.mainColor = mainColor;
     }
 

@@ -9,4 +9,7 @@ public interface ITransport {
 
     // Отрисовка военной техники
     void drawTransport(Graphics g);
+
+    // Смена основного цвета
+    void setMainColor(Color color);
 }
