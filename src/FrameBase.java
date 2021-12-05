@@ -232,7 +232,6 @@ public class FrameBase extends JFrame {
                 JOptionPane.showMessageDialog(this, "Не удалось сохранить");
             }
         }
-
     }
 
     private void load() {
