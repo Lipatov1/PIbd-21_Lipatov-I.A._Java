@@ -5,6 +5,9 @@ public class ArmoredCar extends Vehicle {
     protected int armoredCarWidth = 210;
     protected int armoredCarHeight = 85;
 
+    // Разделитель для записи информации по объекту в файл
+    protected String separator = ";";
+
     // Конструктор
     public ArmoredCar(int maxSpeed, float weight, Color mainColor) {
         this.maxSpeed = maxSpeed;
@@ -19,6 +22,16 @@ public class ArmoredCar extends Vehicle {
         this.mainColor = mainColor;
         this.armoredCarHeight = armoredCarHeight;
         this.armoredCarWidth = armoredCarWidth;
+    }
+
+    // Конструктор для загрузки с файла
+    public ArmoredCar(String info) {
+        String[] args = info.split(separator);
+        if (args.length == 3) {
+            maxSpeed = Integer.parseInt(args[0]);
+            weight = Float.parseFloat(args[1]);
+            mainColor = new Color(Integer.parseInt(args[2]));
+        }
     }
 
     // Изменение направления перемещения
@@ -71,5 +84,9 @@ public class ArmoredCar extends Vehicle {
         g2.setColor(mainColor);
         g.fillRect(startPosX + 7, startPosY + 30, 198, 20);
         g.fillRect(startPosX + 60, startPosY, 90, 30);
+    }
+
+    public String toString() {
+        return maxSpeed + separator + weight + separator + mainColor.getRGB();
     }
 }

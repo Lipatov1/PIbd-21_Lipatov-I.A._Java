@@ -54,6 +54,36 @@ public class SelfPropArtilleryInstal extends ArmoredCar {
         this.caterpillar = caterpillar;
     }
 
+    public SelfPropArtilleryInstal(String info) {
+        super(info);
+        String[] args = info.split(separator);
+        if (args.length == 8) {
+            maxSpeed = Integer.parseInt(args[0]);
+            weight = Float.parseFloat(args[1]);
+            mainColor = new Color(Integer.parseInt(args[2]));
+            dopColor = new Color(Integer.parseInt(args[3]));
+            camouflage = Boolean.parseBoolean(args[4]);
+            star = Boolean.parseBoolean(args[5]);
+            caterpillar = Boolean.parseBoolean(args[6]);
+            if (args[7].contains("null")) {
+                additionalElems = null;
+            } else {
+                switch (args[7].split("\\.")[0]) {
+                    case "RectangleGuns":
+                        additionalElems = new RectangleGuns();
+                        break;
+                    case "RoundedGuns":
+                        additionalElems = new RoundedGuns();
+                        break;
+                    case "TriangularGuns":
+                        additionalElems = new TriangularGuns();
+                        break;
+                }
+                additionalElems.setNumber(Integer.parseInt(args[7].split("\\.")[1]));
+            }
+        }
+    }
+
     @Override
     // Отрисовка cамоходной артиллерийской установки
     public void drawTransport(Graphics g) {
@@ -102,5 +132,11 @@ public class SelfPropArtilleryInstal extends ArmoredCar {
         if (additionalElems != null) {
             additionalElems.draw(g, mainColor, startPosX, startPosY);
         }
+    }
+
+    public String toString() {
+        return maxSpeed + separator + weight + separator + mainColor.getRGB() + separator +
+                dopColor.getRGB() + separator + camouflage + separator + star + separator +
+                caterpillar + separator + additionalElems;
     }
 }
