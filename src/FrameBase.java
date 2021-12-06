@@ -158,7 +158,7 @@ public class FrameBase extends JFrame {
                 repaint();
             }
         } catch (BaseOverflowException e) {
-            JOptionPane.showMessageDialog(this, "Автовокзал переполнен", "Ошибка", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "База переполнена", "Ошибка", JOptionPane.ERROR_MESSAGE);
             logger.warn(e.getMessage());
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Неизвестная ошибка", "Ошибка", JOptionPane.ERROR_MESSAGE);
