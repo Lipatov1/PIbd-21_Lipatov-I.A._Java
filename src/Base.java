@@ -24,23 +24,22 @@ public class Base<T extends ITransport, H extends AdditionalElems> {
     }
 
     // Перегрузка оператора сложения
-    public int add(T transport) {
-        if (places.size() < maxCount) {
-            places.add(transport);
-            return 1;
+    public int add(T transport) throws BaseOverflowException {
+        if (places.size() >= maxCount) {
+            throw new BaseOverflowException();
         }
-        return -1;
+        places.add(transport);
+        return 1;
     }
 
     // Перегрузка оператора вычитания
-    public T remove(int index) {
-        if (index >= 0 && index < maxCount && places.get(index) != null) {
-            T militaryEquipment = places.get(index);
-            places.remove(index);
-            return militaryEquipment;
-        } else {
-            return null;
+    public T remove(int index) throws BasePlaceNotFoundException {
+        if (index < 0 || index >= places.size()) {
+            throw new BasePlaceNotFoundException(index);
         }
+        T militaryEquipment = places.get(index);
+        places.remove(index);
+        return militaryEquipment;
     }
 
     // Подсчет занятых мест

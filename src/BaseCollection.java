@@ -1,10 +1,9 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.FileAlreadyExistsException;
+import java.security.KeyException;
 import java.util.Scanner;
 
 public class BaseCollection {
@@ -60,7 +59,7 @@ public class BaseCollection {
     }
 
     // Сохранение информации по технике на базах в файл
-    public boolean saveData(File saveFile) {
+    public void saveData(File saveFile) throws IOException {
         if (saveFile.exists()) {
             saveFile.delete();
         }
@@ -81,16 +80,13 @@ public class BaseCollection {
                     fileWriter.write(militaryEquipment.toString() + '\n');
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-        return true;
     }
 
     // Загрузка информации по техникам на базах из файла
-    public boolean loadData(String filename) {
+    public void loadData(String filename) throws IllegalArgumentException, IOException, BaseOverflowException {
         if (!(new File(filename).exists())) {
-            return false;
+            throw new FileNotFoundException("Файл не найден");
         }
 
         try (FileReader fileReader = new FileReader(filename)) {
@@ -98,7 +94,7 @@ public class BaseCollection {
             if (scanner.nextLine().contains("BaseCollection")) {
                 baseStages.clear();
             } else {
-                return false;
+                throw new IllegalArgumentException("Неверный формат файла");
             }
 
             Vehicle militaryEquipment = null;
@@ -115,18 +111,15 @@ public class BaseCollection {
                         militaryEquipment = new ArmoredCar(line.split(separator)[1]);
                     }
                     if (!(baseStages.get(key).add(militaryEquipment) == 1)) {
-                        return false;
+                        throw new BaseOverflowException();
                     }
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-        return true;
     }
 
     // Сохранение информации по технике на базе в файл
-    public boolean saveBase(File saveFile, String key) {
+    public void saveBase(File saveFile, String key) throws IOException, KeyException {
         if (baseStages.containsKey(key)) {
             if (saveFile.exists()) {
                 saveFile.delete();
@@ -144,16 +137,12 @@ public class BaseCollection {
                     }
                     fileWriter.write(militaryEquipment.toString() + '\n');
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
             }
-            return true;
-        }
-        return false;
+        } else throw new KeyException();
     }
 
     // Загрузка информации по техникам на базе из файла
-    public boolean loadBase(String filename) {
+    public void loadBase(String filename) throws BaseOverflowException, IllegalArgumentException, IOException {
         try (FileReader fileReader = new FileReader(filename)) {
             Scanner scanner = new Scanner(fileReader);
             String line = scanner.nextLine();
@@ -167,7 +156,7 @@ public class BaseCollection {
                     baseStages.put(key, new Base<>(pictureWidth, pictureHeight));
                 }
             } else {
-                return false;
+                throw new IllegalArgumentException("Неверный формат файла");
             }
 
             Vehicle militaryEquipment = null;
@@ -180,13 +169,10 @@ public class BaseCollection {
                         militaryEquipment = new ArmoredCar(line.split(separator)[1]);
                     }
                     if (!(baseStages.get(key).add(militaryEquipment) == 1)) {
-                        return false;
+                        throw new BaseOverflowException();
                     }
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-        return true;
     }
 }

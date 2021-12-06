@@ -3,6 +3,11 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.util.LinkedList;
 import java.util.Objects;
+import org.apache.log4j.Logger;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.PropertyConfigurator;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class FrameBase extends JFrame {
     private final LinkedList<Vehicle> militaryEquipmentLinkedList;
@@ -13,7 +18,11 @@ public class FrameBase extends JFrame {
     private final JList<String> listBoxBases;
     private final PanelBase panelBase;
 
+    private Logger logger;
+
     public FrameBase() {
+        logger = LogManager.getLogger(FrameBase.class);
+        PropertyConfigurator.configure("C:\\Users\\mmmuu\\source\\repos\\TP\\Java\\GG\\PIbd-21_Lipatov-I.A._Java_Git_7_2\\src\\log4j2.properties");
         setTitle("База");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1080, 500);
@@ -131,7 +140,12 @@ public class FrameBase extends JFrame {
     }
 
     private void setMilitaryEquipment() {
-        if (listBoxBases.getSelectedIndex() >= 0) {
+        if (listBoxBases.getSelectedValue() == null) {
+            JOptionPane.showMessageDialog(this, "База не выбрана", "Ошибка", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
             PanelMilitaryEquipmentConfig panelMilitaryEquipmentConfig = new PanelMilitaryEquipmentConfig(this);
 
             // Получаем технику из panelMilitaryEquipmentConfig
@@ -140,40 +154,54 @@ public class FrameBase extends JFrame {
             if (militaryEquipment == null)
                 return;
             if (baseCollection.get(listBoxBases.getSelectedValue()).add(militaryEquipment) != -1) {
+                logger.info("На базу " + listBoxBases.getSelectedValue() + " была добавлена техника " + militaryEquipment);
                 repaint();
-            } else {
-                JOptionPane.showMessageDialog(this, "База переполнена");
             }
-        } else {
-            JOptionPane.showMessageDialog(this, "База не выбрана", "Ошибка", JOptionPane.ERROR_MESSAGE);
+        } catch (BaseOverflowException e) {
+            JOptionPane.showMessageDialog(this, "Автовокзал переполнен", "Ошибка", JOptionPane.ERROR_MESSAGE);
+            logger.warn(e.getMessage());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Неизвестная ошибка", "Ошибка", JOptionPane.ERROR_MESSAGE);
+            logger.fatal(e.getMessage());
         }
     }
 
     private void AddToList() {
-        if (listBoxBases.getSelectedIndex() >= 0) {
-            if (!textFieldPlaceNumber.getText().equals("")) {
-                try {
-                    var militaryEquipment = baseCollection.get(listBoxBases.getSelectedValue()).remove(Integer.parseInt(textFieldPlaceNumber.getText()));
-                    if (militaryEquipment != null) {
-                        militaryEquipmentLinkedList.add(militaryEquipment);
-                        repaint();
-                    } else {
-                        JOptionPane.showMessageDialog(this, "Техника с таким индексом отсутствует", "Ошибка", JOptionPane.ERROR_MESSAGE);
-                    }
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(this, "Техника с таким индексом отсутствует", "Ошибка", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        } else {
+        if (listBoxBases.getSelectedValue() == null) {
             JOptionPane.showMessageDialog(this, "База не выбрана", "Ошибка", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (textFieldPlaceNumber.getText().equals("")) {
+            JOptionPane.showMessageDialog(this, "Перед изъятием техники необходимо ввести номер места", "Ошибка", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
+            Vehicle militaryEquipment = baseCollection.get(listBoxBases.getSelectedValue()).remove(Integer.parseInt(textFieldPlaceNumber.getText()));
+            if (militaryEquipment != null) {
+                militaryEquipmentLinkedList.add(militaryEquipment);
+                logger.info("С базы " + listBoxBases.getSelectedValue() + " была изъята техника " + militaryEquipment + " и помещена в List");
+                repaint();
+            }
+        } catch (BasePlaceNotFoundException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Не найдено", JOptionPane.ERROR_MESSAGE);
+            logger.warn(e.getMessage());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Неизвестная ошибка", "Ошибка", JOptionPane.ERROR_MESSAGE);
+            logger.fatal(e.getMessage());
         }
     }
 
     private void GetFromList() {
         if (!militaryEquipmentLinkedList.isEmpty()) {
             FrameMilitaryEquipment frameMilitaryEquipment = new FrameMilitaryEquipment();
-            frameMilitaryEquipment.setTransport(Objects.requireNonNull(militaryEquipmentLinkedList.poll()));
+            Vehicle militaryEquipment = militaryEquipmentLinkedList.poll();
+            frameMilitaryEquipment.setTransport(Objects.requireNonNull(militaryEquipment));
+            logger.info("Техника " + militaryEquipment + " была изъята из List");
             repaint();
+        } else {
+            JOptionPane.showMessageDialog(this, "List пуст", "Ошибка", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -196,6 +224,7 @@ public class FrameBase extends JFrame {
         if (!textFieldNewLevelName.getText().equals("")) {
             baseCollection.addBase(textFieldNewLevelName.getText());
             reloadLevels();
+            logger.info("Добавлена база " + textFieldNewLevelName.getText());
             repaint();
         } else {
             JOptionPane.showMessageDialog(this, "Введите название базы", "Ошибка", JOptionPane.ERROR_MESSAGE);
@@ -206,6 +235,7 @@ public class FrameBase extends JFrame {
         if (listBoxBases.getSelectedIndex() >= 0) {
             int result = JOptionPane.showConfirmDialog(this, "Удалить базу " + listBoxBases.getSelectedValue() + "?", "Удаление", JOptionPane.YES_NO_OPTION);
             if (result == JOptionPane.YES_OPTION) {
+                logger.info("База " + listBoxBases.getSelectedValue() + " удалена");
                 baseCollection.delBase(listBoxBases.getSelectedValue());
                 reloadLevels();
                 repaint();
@@ -217,6 +247,9 @@ public class FrameBase extends JFrame {
 
     private void listListener() {
         panelBase.setSelectedItem(listBoxBases.getSelectedValue());
+        if (listBoxBases.getSelectedValue() != null) {
+            logger.info("Выбрана база " + listBoxBases.getSelectedValue());
+        }
         repaint();
     }
 
@@ -225,11 +258,16 @@ public class FrameBase extends JFrame {
         fileDialog.setFileFilter(new FileNameExtensionFilter("Текстовый файл", "txt"));
         int result = fileDialog.showSaveDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
-            if (baseCollection.saveData(fileDialog.getSelectedFile())) {
+            try {
+                baseCollection.saveData(fileDialog.getSelectedFile());
                 JOptionPane.showMessageDialog(this, "Сохранение прошло успешно");
-            }
-            else {
-                JOptionPane.showMessageDialog(this, "Не удалось сохранить");
+                logger.info("Данные сохранены в файл " + fileDialog.getSelectedFile().getPath());
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Ошибка при работе с файлом", JOptionPane.ERROR_MESSAGE);
+                logger.error(e.getMessage());
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Неизвестная ошибка при сохранении", JOptionPane.ERROR_MESSAGE);
+                logger.fatal(e.getMessage());
             }
         }
     }
@@ -239,18 +277,34 @@ public class FrameBase extends JFrame {
         fileDialog.setFileFilter(new FileNameExtensionFilter("Текстовый файл", "txt"));
         int result = fileDialog.showOpenDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
-            if (baseCollection.loadData(fileDialog.getSelectedFile().getPath())) {
+            try {
+                baseCollection.loadData(fileDialog.getSelectedFile().getPath());
                 JOptionPane.showMessageDialog(this, "Загрузка прошла успешно");
                 reloadLevels();
                 repaint();
-            }
-            else {
-                JOptionPane.showMessageDialog(this,"Не удалось загрузить файл");
+                logger.info("Данные были загружены из файла " + fileDialog.getSelectedFile().getPath());
+            } catch (BaseOverflowException e) {
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Переполнение базы", JOptionPane.ERROR_MESSAGE);
+                logger.warn(e.getMessage());
+            } catch (FileNotFoundException e) {
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Файл не найден", JOptionPane.ERROR_MESSAGE);
+                logger.error(e.getMessage());
+            } catch (IllegalArgumentException e) {
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Неверный формат файла", JOptionPane.ERROR_MESSAGE);
+                logger.error(e.getMessage());
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Неизвестная ошибка при загрузке", JOptionPane.ERROR_MESSAGE);
+                logger.fatal(e.getMessage());
             }
         }
     }
 
     private void saveBase() {
+        if (listBoxBases.getSelectedValue() == null) {
+            JOptionPane.showMessageDialog(this, "База не выбрана", "Ошибка", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         JFileChooser fileDialog = new JFileChooser();
         fileDialog.setFileFilter(new FileNameExtensionFilter("Текстовый файл", "txt"));
         if (listBoxBases.getSelectedValue() == null) {
@@ -259,10 +313,16 @@ public class FrameBase extends JFrame {
         }
         int result = fileDialog.showSaveDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
-            if (baseCollection.saveBase(fileDialog.getSelectedFile(), listBoxBases.getSelectedValue())) {
+            try {
+                baseCollection.saveBase(fileDialog.getSelectedFile(), listBoxBases.getSelectedValue());
                 JOptionPane.showMessageDialog(this, "Сохранение прошло успешно", "Результат", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(this, "Не удалось сохранить", "Ошибка", JOptionPane.ERROR_MESSAGE);
+                logger.info("База " + listBoxBases.getSelectedValue() + " была записана в файл " + fileDialog.getSelectedFile().getPath());
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Ошибка при работе с файлом", JOptionPane.ERROR_MESSAGE);
+                logger.error(e.getMessage());
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Неизвестная ошибка при сохранении", JOptionPane.ERROR_MESSAGE);
+                logger.fatal(e.getMessage());
             }
         }
     }
@@ -272,12 +332,24 @@ public class FrameBase extends JFrame {
         fileDialog.setFileFilter(new FileNameExtensionFilter("Текстовый файл", "txt"));
         int result = fileDialog.showOpenDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
-            if (baseCollection.loadBase(fileDialog.getSelectedFile().getPath())) {
+            try {
+                baseCollection.loadBase(fileDialog.getSelectedFile().getPath());
                 JOptionPane.showMessageDialog(this, "Загрузка прошла успешно", "Результат", JOptionPane.INFORMATION_MESSAGE);
                 reloadLevels();
                 repaint();
-            } else {
-                JOptionPane.showMessageDialog(this, "Не удалось загрузить файл", "Ошибка", JOptionPane.ERROR_MESSAGE);
+                logger.info("Из файла " + fileDialog.getSelectedFile().getPath() + " была загружена база");
+            } catch (BaseOverflowException e) {
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Переполнение базы", JOptionPane.ERROR_MESSAGE);
+                logger.warn(e.getMessage());
+            } catch (FileNotFoundException e) {
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Файл не найден", JOptionPane.ERROR_MESSAGE);
+                logger.error(e.getMessage());
+            } catch (IllegalArgumentException e) {
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Неверный формат файла", JOptionPane.ERROR_MESSAGE);
+                logger.error(e.getMessage());
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Неизвестная ошибка при загрузке", JOptionPane.ERROR_MESSAGE);
+                logger.fatal(e.getMessage());
             }
         }
     }
