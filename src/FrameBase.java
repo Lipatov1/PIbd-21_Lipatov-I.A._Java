@@ -1,6 +1,6 @@
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.*;
 import javax.swing.border.Border;
-import java.awt.*;
 import java.util.LinkedList;
 import java.util.Objects;
 
@@ -28,6 +28,38 @@ public class FrameBase extends JFrame {
         panelBase = new PanelBase(baseCollection);
         panelBase.setBounds(0, 0, 920, 450);
         add(panelBase);
+
+        // Создание JMenuItem "Сохранить" и добавление ему действия
+        JMenuItem fileItemSave = new JMenuItem("Сохранить");
+        fileItemSave.addActionListener(e -> save());
+
+        // Создание JMenuItem "Загрузить" и добавление ему действия
+        JMenuItem fileItemLoad = new JMenuItem("Загрузить");
+        fileItemLoad.addActionListener(e -> load());
+
+        // Создание JMenuItem "Сохранить базу" и добавление ему действия
+        JMenuItem baseItemSave = new JMenuItem("Сохранить базу");
+        baseItemSave.addActionListener(e -> saveBase());
+
+        // Создание JMenuItem "Загрузить базу" и добавление ему действия
+        JMenuItem baseItemLoad = new JMenuItem("Загрузить базу");
+        baseItemLoad.addActionListener(e -> loadBase());
+
+        // Создание JMenu "Файл" и добавление в него JMenuItem
+        JMenu menuFile = new JMenu("Файл");
+        menuFile.add(fileItemSave);
+        menuFile.add(fileItemLoad);
+
+        // Создание JMenu "База" и добавление в него JMenuItem
+        JMenu menuBase = new JMenu("База");
+        menuBase.add(baseItemSave);
+        menuBase.add(baseItemLoad);
+
+        // Создание JMenuBar, добавление на него JMenu и добавление его на форму
+        JMenuBar menu = new JMenuBar();
+        menu.add(menuFile);
+        menu.add(menuBase);
+        setJMenuBar(menu);
 
         // Создание, размещение и добавление текста "Базы:"
         JLabel labelBases = new JLabel("Базы:");
@@ -186,5 +218,67 @@ public class FrameBase extends JFrame {
     private void listListener() {
         panelBase.setSelectedItem(listBoxBases.getSelectedValue());
         repaint();
+    }
+
+    private void save() {
+        JFileChooser fileDialog = new JFileChooser();
+        fileDialog.setFileFilter(new FileNameExtensionFilter("Текстовый файл", "txt"));
+        int result = fileDialog.showSaveDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            if (baseCollection.saveData(fileDialog.getSelectedFile())) {
+                JOptionPane.showMessageDialog(this, "Сохранение прошло успешно");
+            }
+            else {
+                JOptionPane.showMessageDialog(this, "Не удалось сохранить");
+            }
+        }
+    }
+
+    private void load() {
+        JFileChooser fileDialog = new JFileChooser();
+        fileDialog.setFileFilter(new FileNameExtensionFilter("Текстовый файл", "txt"));
+        int result = fileDialog.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            if (baseCollection.loadData(fileDialog.getSelectedFile().getPath())) {
+                JOptionPane.showMessageDialog(this, "Загрузка прошла успешно");
+                reloadLevels();
+                repaint();
+            }
+            else {
+                JOptionPane.showMessageDialog(this,"Не удалось загрузить файл");
+            }
+        }
+    }
+
+    private void saveBase() {
+        JFileChooser fileDialog = new JFileChooser();
+        fileDialog.setFileFilter(new FileNameExtensionFilter("Текстовый файл", "txt"));
+        if (listBoxBases.getSelectedValue() == null) {
+            JOptionPane.showMessageDialog(this, "Перед сохранением необходимо выбрать базу");
+            return;
+        }
+        int result = fileDialog.showSaveDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            if (baseCollection.saveBase(fileDialog.getSelectedFile(), listBoxBases.getSelectedValue())) {
+                JOptionPane.showMessageDialog(this, "Сохранение прошло успешно", "Результат", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Не удалось сохранить", "Ошибка", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private void loadBase() {
+        JFileChooser fileDialog = new JFileChooser();
+        fileDialog.setFileFilter(new FileNameExtensionFilter("Текстовый файл", "txt"));
+        int result = fileDialog.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            if (baseCollection.loadBase(fileDialog.getSelectedFile().getPath())) {
+                JOptionPane.showMessageDialog(this, "Загрузка прошла успешно", "Результат", JOptionPane.INFORMATION_MESSAGE);
+                reloadLevels();
+                repaint();
+            } else {
+                JOptionPane.showMessageDialog(this, "Не удалось загрузить файл", "Ошибка", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 }

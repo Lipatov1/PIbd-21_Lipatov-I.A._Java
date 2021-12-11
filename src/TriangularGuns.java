@@ -27,4 +27,8 @@ public class TriangularGuns implements AdditionalElems {
             }
         }
     }
+
+    public String toString() {
+        return this.getClass().getSimpleName() + '.' + numberGuns.ordinal();
+    }
 }

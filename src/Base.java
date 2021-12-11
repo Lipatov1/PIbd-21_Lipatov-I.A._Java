@@ -92,4 +92,8 @@ public class Base<T extends ITransport, H extends AdditionalElems> {
         }
         return null;
     }
+
+    public void clear() {
+        places.clear();
+    }
 }
