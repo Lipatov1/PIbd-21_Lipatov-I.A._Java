@@ -1,6 +1,9 @@
 import java.awt.*;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.NoSuchElementException;
 
-public class ArmoredCar extends Vehicle {
+public class ArmoredCar extends Vehicle implements Iterator<Object>, Iterable<Object>, Comparable<ArmoredCar>  {
     // Ширина и высота отрисовки бронированной машины
     protected int armoredCarWidth = 210;
     protected int armoredCarHeight = 85;
@@ -8,11 +11,17 @@ public class ArmoredCar extends Vehicle {
     // Разделитель для записи информации по объекту в файл
     protected String separator = ";";
 
+    protected LinkedList<Object> listConfig = new LinkedList<>();
+    protected int currentIndex = -1;
+
     // Конструктор
     public ArmoredCar(int maxSpeed, float weight, Color mainColor) {
         this.maxSpeed = maxSpeed;
         this.weight = weight;
         this.mainColor = mainColor;
+        listConfig.add(maxSpeed);
+        listConfig.add(weight);
+        listConfig.add(mainColor);
     }
 
     // Конструктор с изменением размеров бронированной машины
@@ -31,6 +40,9 @@ public class ArmoredCar extends Vehicle {
             maxSpeed = Integer.parseInt(args[0]);
             weight = Float.parseFloat(args[1]);
             mainColor = new Color(Integer.parseInt(args[2]));
+            listConfig.add(maxSpeed);
+            listConfig.add(weight);
+            listConfig.add(mainColor);
         }
     }
 
@@ -88,5 +100,69 @@ public class ArmoredCar extends Vehicle {
 
     public String toString() {
         return maxSpeed + separator + weight + separator + mainColor.getRGB();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof ArmoredCar militaryEquipmentObject)) {
+            return false;
+        }
+        return equals(militaryEquipmentObject);
+    }
+
+    public boolean equals(ArmoredCar other) {
+        if (other == null) {
+            return false;
+        }
+        if (!this.getClass().getSimpleName().equals(other.getClass().getSimpleName())) {
+            return false;
+        }
+        if (maxSpeed != other.maxSpeed) {
+            return false;
+        }
+        if (weight != other.weight) {
+            return false;
+        }
+        if (mainColor.getRGB() != other.mainColor.getRGB()) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int compareTo(ArmoredCar armoredCar) {
+        if (maxSpeed != armoredCar.maxSpeed) {
+            return Integer.compare(maxSpeed, armoredCar.maxSpeed);
+        }
+        if (weight != armoredCar.weight) {
+            return Float.compare(weight, armoredCar.weight);
+        }
+        if (mainColor.getRGB() != armoredCar.mainColor.getRGB()) {
+            return Integer.compare(mainColor.getRGB(), armoredCar.getMainColor().getRGB());
+        }
+        return 0;
+    }
+
+    @Override
+    public Iterator<Object> iterator() {
+        currentIndex = -1;
+        return listConfig.iterator();
+    }
+
+    @Override
+    public boolean hasNext() {
+        return (currentIndex + 1 < listConfig.size());
+    }
+
+    @Override
+    public Object next() {
+        if (!hasNext()) {
+            throw new NoSuchElementException();
+        }
+        currentIndex++;
+        return listConfig.get(currentIndex);
     }
 }

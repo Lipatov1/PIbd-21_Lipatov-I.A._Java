@@ -1,7 +1,8 @@
 import java.awt.*;
+import java.util.Iterator;
 import java.util.Random;
 
-public class SelfPropArtilleryInstal extends ArmoredCar {
+public class SelfPropArtilleryInstal extends ArmoredCar implements Iterator<Object>, Iterable<Object>, Comparable<ArmoredCar> {
     // Закрытое поле от ИнтерДоп
     private AdditionalElems additionalElems;
 
@@ -52,6 +53,10 @@ public class SelfPropArtilleryInstal extends ArmoredCar {
         this.camouflage = camouflage;
         this.star = star;
         this.caterpillar = caterpillar;
+        listConfig.add(dopColor);
+        listConfig.add(isCamouflage());
+        listConfig.add(isStar());
+        listConfig.add(isCaterpillar());
     }
 
     public SelfPropArtilleryInstal(String info) {
@@ -81,6 +86,16 @@ public class SelfPropArtilleryInstal extends ArmoredCar {
                 }
                 additionalElems.setNumber(Integer.parseInt(args[7].split("\\.")[1]));
             }
+            listConfig.add(maxSpeed);
+            listConfig.add(weight);
+            listConfig.add(mainColor);
+            listConfig.add(dopColor);
+            listConfig.add(isCamouflage());
+            listConfig.add(isStar());
+            listConfig.add(isCaterpillar());
+            listConfig.add(additionalElems);
+            listConfig.add(args[7].split("\\.")[0]);
+            listConfig.add(args[7].split("\\.")[1]);
         }
     }
 
@@ -138,5 +153,82 @@ public class SelfPropArtilleryInstal extends ArmoredCar {
         return maxSpeed + separator + weight + separator + mainColor.getRGB() + separator +
                 dopColor.getRGB() + separator + camouflage + separator + star + separator +
                 caterpillar + separator + additionalElems;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof SelfPropArtilleryInstal selfPropArtilleryInstalObject)) {
+            return false;
+        }
+        return equals(selfPropArtilleryInstalObject);
+    }
+
+    public boolean equals(SelfPropArtilleryInstal other) {
+        if (other == null) {
+            return false;
+        }
+        if (!this.getClass().getSimpleName().equals(other.getClass().getSimpleName())) {
+            return false;
+        }
+        if (maxSpeed != other.maxSpeed) {
+            return false;
+        }
+        if (weight != other.weight) {
+            return false;
+        }
+        if (mainColor.getRGB() != other.mainColor.getRGB()) {
+            return false;
+        }
+        if (dopColor.getRGB() != other.dopColor.getRGB()) {
+            return false;
+        }
+        if (camouflage != other.camouflage) {
+            return false;
+        }
+        if (star != other.star) {
+            return false;
+        }
+        if (caterpillar != other.caterpillar) {
+            return false;
+        }
+        if (additionalElems != null && other.additionalElems != null && !(additionalElems.toString().equals(other.additionalElems.toString()))) {
+            return false;
+        }
+        if ((additionalElems == null && other.additionalElems != null) || (additionalElems != null && other.additionalElems == null)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int compareTo(ArmoredCar armoredCar) {
+        SelfPropArtilleryInstal selfPropArtilleryInstal = (SelfPropArtilleryInstal) armoredCar;
+
+        if (dopColor.getRGB() != selfPropArtilleryInstal.dopColor.getRGB()) {
+            return Integer.compare(dopColor.getRGB(), selfPropArtilleryInstal.dopColor.getRGB());
+        }
+        if (camouflage != selfPropArtilleryInstal.camouflage) {
+            return Boolean.compare(camouflage, selfPropArtilleryInstal.camouflage);
+        }
+        if (star != selfPropArtilleryInstal.star) {
+            return Boolean.compare(star, selfPropArtilleryInstal.star);
+        }
+        if (caterpillar != selfPropArtilleryInstal.caterpillar) {
+            return Boolean.compare(caterpillar, selfPropArtilleryInstal.caterpillar);
+        }
+        if (additionalElems == null && selfPropArtilleryInstal.additionalElems != null) {
+            return 1;
+        }
+        if (additionalElems != null && selfPropArtilleryInstal.additionalElems == null) {
+            return -1;
+        }
+        return 0;
+    }
+
+    public AdditionalElems getAdditionalElems() {
+        return  additionalElems;
     }
 }

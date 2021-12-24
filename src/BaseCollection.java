@@ -84,7 +84,7 @@ public class BaseCollection {
     }
 
     // Загрузка информации по техникам на базах из файла
-    public void loadData(String filename) throws IllegalArgumentException, IOException, BaseOverflowException {
+    public void loadData(String filename) throws IllegalArgumentException, IOException, BaseOverflowException, BaseAlreadyHaveException {
         if (!(new File(filename).exists())) {
             throw new FileNotFoundException("Файл не найден");
         }
@@ -142,7 +142,7 @@ public class BaseCollection {
     }
 
     // Загрузка информации по техникам на базе из файла
-    public void loadBase(String filename) throws BaseOverflowException, IllegalArgumentException, IOException {
+    public void loadBase(String filename) throws BaseOverflowException, IllegalArgumentException, IOException, BaseAlreadyHaveException {
         try (FileReader fileReader = new FileReader(filename)) {
             Scanner scanner = new Scanner(fileReader);
             String line = scanner.nextLine();

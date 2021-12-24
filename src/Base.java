@@ -1,8 +1,9 @@
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.*;
+import java.util.Iterator;
 import java.util.List;
 
-public class Base<T extends ITransport, H extends AdditionalElems> {
+public class Base<T extends ITransport, H extends AdditionalElems> implements Iterator<T>, Iterable<T> {
     private final List<T> places;
     private final int maxCount;
 
@@ -14,6 +15,8 @@ public class Base<T extends ITransport, H extends AdditionalElems> {
     private final int placeSizeWidth = 460;
     private final int placeSizeHeight = 105;
 
+    private int currentIndex;
+
     public Base(int pictureWidth, int pictureHeight) {
         int columnsNumber = pictureWidth / placeSizeWidth;
         int rowsNumber = pictureHeight / placeSizeHeight;
@@ -24,9 +27,12 @@ public class Base<T extends ITransport, H extends AdditionalElems> {
     }
 
     // Перегрузка оператора сложения
-    public int add(T transport) throws BaseOverflowException {
+    public int add(T transport) throws BaseOverflowException, BaseAlreadyHaveException {
         if (places.size() >= maxCount) {
             throw new BaseOverflowException();
+        }
+        if (places.contains(transport)) {
+            throw new BaseAlreadyHaveException();
         }
         places.add(transport);
         return 1;
@@ -94,5 +100,35 @@ public class Base<T extends ITransport, H extends AdditionalElems> {
 
     public void clear() {
         places.clear();
+    }
+
+    public void sort() {
+        places.sort((Comparator<? super T>) new MilitaryEquipmentComparer());
+    }
+
+    @Override
+    public boolean hasNext() {
+        return currentIndex < places.size() - 1;
+    }
+
+    @Override
+    public T next() {
+        if (!hasNext()) {
+            throw new NoSuchElementException();
+        }
+        currentIndex++;
+        return places.get(currentIndex);
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        currentIndex = -1;
+        return this;
+    }
+
+    public void printInfo() {
+        for (T militaryEquipmentObj : places) {
+            System.out.println(militaryEquipmentObj);
+        }
     }
 }
