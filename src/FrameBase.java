@@ -22,7 +22,7 @@ public class FrameBase extends JFrame {
 
     public FrameBase() {
         logger = LogManager.getLogger(FrameBase.class);
-        PropertyConfigurator.configure("C:\\Users\\mmmuu\\source\\repos\\TP\\Java\\GG\\PIbd-21_Lipatov-I.A._Java_Git_7_2\\src\\log4j2.properties");
+        PropertyConfigurator.configure("C:\\Users\\mmmuu\\source\\repos\\TP\\Java\\GG\\PIbd-21_Lipatov-I.A._Java_Git_8\\src\\log4j2.properties");
         setTitle("База");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1080, 500);
@@ -134,6 +134,12 @@ public class FrameBase extends JFrame {
         buttonGetFromList.addActionListener(e -> GetFromList());
         groupBoxTakeTechnic.add(buttonGetFromList);
 
+        // Создание, размещение, назначения действия и добавление кнопки "Сортировать"
+        JButton buttonSort = new JButton("Сортировать");
+        buttonSort .setBounds(910, 370, 140, 23);
+        buttonSort .addActionListener(e -> sort());
+        add(buttonSort);
+
         add(groupBoxTakeTechnic);
 
         repaint();
@@ -159,9 +165,13 @@ public class FrameBase extends JFrame {
             }
         } catch (BaseOverflowException e) {
             JOptionPane.showMessageDialog(this, "База переполнена", "Ошибка", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Переполнение базы", JOptionPane.ERROR_MESSAGE);
+            logger.warn(e.getMessage());
+        } catch (BaseAlreadyHaveException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Дублирование", JOptionPane.ERROR_MESSAGE);
             logger.warn(e.getMessage());
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Неизвестная ошибка", "Ошибка", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Неизвестная ошибка", JOptionPane.ERROR_MESSAGE);
             logger.fatal(e.getMessage());
         }
     }
@@ -286,6 +296,9 @@ public class FrameBase extends JFrame {
             } catch (BaseOverflowException e) {
                 JOptionPane.showMessageDialog(this, e.getMessage(), "Переполнение базы", JOptionPane.ERROR_MESSAGE);
                 logger.warn(e.getMessage());
+            } catch (BaseAlreadyHaveException e) {
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Дублирование", JOptionPane.ERROR_MESSAGE);
+                logger.warn(e.getMessage());
             } catch (FileNotFoundException e) {
                 JOptionPane.showMessageDialog(this, e.getMessage(), "Файл не найден", JOptionPane.ERROR_MESSAGE);
                 logger.error(e.getMessage());
@@ -341,6 +354,9 @@ public class FrameBase extends JFrame {
             } catch (BaseOverflowException e) {
                 JOptionPane.showMessageDialog(this, e.getMessage(), "Переполнение базы", JOptionPane.ERROR_MESSAGE);
                 logger.warn(e.getMessage());
+            } catch (BaseAlreadyHaveException e) {
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Дублирование", JOptionPane.ERROR_MESSAGE);
+                logger.warn(e.getMessage());
             } catch (FileNotFoundException e) {
                 JOptionPane.showMessageDialog(this, e.getMessage(), "Файл не найден", JOptionPane.ERROR_MESSAGE);
                 logger.error(e.getMessage());
@@ -352,5 +368,15 @@ public class FrameBase extends JFrame {
                 logger.fatal(e.getMessage());
             }
         }
+    }
+
+    private void sort() {
+        if (listBoxBases.getSelectedValue() == null) {
+            JOptionPane.showMessageDialog(this, "Перед сортировкой необходимо выбрать базу", "Ошибка", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        baseCollection.get(listBoxBases.getSelectedValue()).sort();
+        repaint();
+        logger.info("Техника на базе " + listBoxBases.getSelectedValue() + " отсортирована");
     }
 }
